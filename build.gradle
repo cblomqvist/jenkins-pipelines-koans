@@ -1,0 +1,23 @@
+plugins {
+    id 'groovy'
+}
+
+group 'workshops'
+version '0.0.1'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    testImplementation ('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude group: 'org.codehaus.groovy'
+    }
+    testImplementation('com.swedbank:jenkins-pipeline-test') {
+        version {
+            branch = 'master'
+        }
+    }
+}
