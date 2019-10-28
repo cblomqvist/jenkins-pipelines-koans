@@ -12,7 +12,7 @@ class APipelineTest extends Specification {
         when:
         def scriptStep = runner.load {
             script 'vars/aPipeline.groovy'
-            property 'any', { null }
+            // there is missing definition of any agent. 'agent' is a method, but any should be a property of this method
         }
         scriptStep()
         then:
@@ -33,8 +33,9 @@ class APipelineTest extends Specification {
         scriptStep()
 
         then:
-        assert testingSH[0] == 'gradle build'
-        assert testingSH[1] == 'gradle test'
+        // Provide correct output from sh methods
+        assert testingSH[0] == ''
+        assert testingSH[1] == ''
     }
 
     def 'Check if status is success'() {
@@ -45,7 +46,7 @@ class APipelineTest extends Specification {
         def scriptStep = runner.load {
             script 'vars/aPipeline.groovy'
             property 'any', { null }
-            method('echo', [String]) {str -> testingEcho.add(str)}
+            // Collect all 'echo' call into testingEcho list
         }
         scriptStep()
 
@@ -63,9 +64,8 @@ class APipelineTest extends Specification {
             script 'vars/aPipeline.groovy'
             property 'any', { null }
             method('sh', [String]) { str ->
-                if (str.contains('test')) {
-                    currentResult.result = 'FAILURE'
-                } }
+                    // Fail only 'gradle test'
+                    currentResult.result = 'FAILURE' }
             method('echo', [String]) {str -> testingEcho.add(str)}
         }
         scriptStep()
