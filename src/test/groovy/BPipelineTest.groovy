@@ -1,6 +1,10 @@
 import com.swedbank.jenkins.utilities.PipelineTestRunner
 import spock.lang.Specification
 
+/*
+ * Those test cases for testing pipeline together with shared libraries.
+ * TODO: will be continue to transforming them into koans.
+ */
 class BPipelineTest extends Specification {
     PipelineTestRunner runner
 

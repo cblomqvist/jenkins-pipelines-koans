@@ -9,6 +9,10 @@ class RunGradleTest extends Specification{
         runner.preferClassLoading = false
     }
 
+    /*
+     * Testing library methods is the similar process as testing pipelines.
+     * You can also verify what does the script return.
+     */
     def 'check if script with empty parameters is working fine'() {
         when:
         def stepScript = runner.load {
@@ -17,21 +21,24 @@ class RunGradleTest extends Specification{
         stepScript()
 
         then:
-        assert stepScript.class.canonicalName == 'runGradle'
-        assert stepScript() == 'ok'
+        assert stepScript.class.canonicalName == 'TODO: script name'
+        assert stepScript() == 'TODO: status'
     }
 
+    /*
+     * The script returns 'build_status'. What will the status we get if 'sh' command fails.
+     */
     def 'verify build status is not ok'() {
         when:
         def stepScript = runner.load {
             script 'vars/runGradle.groovy'
             env += ['BUILD_ID': '1']
-            method ('sh', [String]) { return 1 }
+            method ('sh', [String]) { return 'TODO: return any non zero value' }
         }
         stepScript()
 
         then:
-        assert stepScript() == 'Current stage failed in build 1 with exit code 1'
+        assert stepScript() == 'TODO: provide correct build_status'
         assert stepScript.env.BUILD_ID == '1'
     }
 }
