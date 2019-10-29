@@ -68,7 +68,8 @@ class APipelineTest extends Specification {
 
     /*
      *  We can manipulate of a stage result to test needed behavior.
-     *  Use 'currentBuild' binding variable to set build result
+     *  Use 'currentBuild' binding variable to get currentResult object.
+     *  The object has a property 'result', which can be SUCCESS, FAILURE, etc.
      */
     def 'Check if status is failure if a stage fails'() {
         given:
@@ -80,9 +81,11 @@ class APipelineTest extends Specification {
             script 'vars/aPipeline.groovy'
             property 'any', { null }
             method('sh', [String]) { str ->
-                    //TODO: You don't want to fail all 'sh' but only one. Choose which.
-                    currentResult.result = 'FAILURE' }
-            method('echo', [String]) {str -> testingEcho.add(str)}
+                    if (str.contains('test')) {
+                        currentResult.result = 'TODO: set a result'
+                    }
+            }
+            method('echo', [String]) { str -> testingEcho.add(str) }
         }
         scriptStep()
 
