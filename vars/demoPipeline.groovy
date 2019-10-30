@@ -14,6 +14,11 @@ def call() {
                     sh 'gradle build'
                 }
             }
+            stage('test') {
+                steps {
+                    sh 'gradle test'
+                }
+            }
         }
         post {
             always {

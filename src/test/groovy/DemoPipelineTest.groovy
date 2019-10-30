@@ -40,4 +40,28 @@ class DemoPipelineTest extends Specification {
         assert testSh.contains('gradle build')
         assert testSh.size() == 1
     }
+
+    def 'fail the test stage'() {
+        given:
+        Object currentBuild = runner.binding.getVariable('currentBuild')
+        List testEcho = []
+        def stepScript = runner.load {
+            script 'vars/demoPipeline.groovy'
+            method ('sh', [String]) { str ->
+                if (str.contains('test')) {
+                    currentBuild.result = 'FAILURE'
+                }
+            }
+            method ('echo', [String]) {
+                str -> testEcho.add(str)
+            }
+        }
+
+        when:
+        stepScript()
+
+        then:
+        testEcho.contains('Boo')
+
+    }
 }
